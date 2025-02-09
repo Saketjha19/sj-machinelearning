@@ -1,59 +1,46 @@
 import streamlit as st
 import pandas as pd
-import pickle
+import numpy as np
 from sklearn.neighbors import NearestNeighbors
 
-# Load data
-movies = pd.read_csv("movies.csv")
-ratings = pd.read_csv("ratings.csv")
+# Load datasets
+@st.cache_data
+def load_data():
+    movies = pd.read_csv("movies.csv")
+    ratings = pd.read_csv("ratings.csv")
+    return movies, ratings
 
-# Load pre-trained model if available
-try:
-    with open("knn_model.pkl", "rb") as f:
-        knn_model = pickle.load(f)
-except FileNotFoundError:
-    st.error("Model file not found. Please train and save the model.")
-    st.stop()
+movies, ratings = load_data()
+
+# Create pivot table for collaborative filtering
+user_movie_ratings = ratings.pivot(index='movieId', columns='userId', values='rating').fillna(0)
+
+# Fit KNN model
+knn = NearestNeighbors(metric='cosine', algorithm='brute')
+knn.fit(user_movie_ratings)
+distances, indices = knn.kneighbors(user_movie_ratings, n_neighbors=10)
+
+# Map movieId to index for retrieval
+movieId_to_index = {movie_id: idx for idx, movie_id in enumerate(user_movie_ratings.index)}
+
+def get_collab_recommendations(movie_id):
+    if movie_id not in movieId_to_index:
+        return []  # Return empty if movie not found
+    row_idx = movieId_to_index[movie_id]
+    neighbors = indices[row_idx][1:]  # Skip the first as it's the movie itself
+    return user_movie_ratings.iloc[neighbors].index.tolist()
 
 # Streamlit UI
-st.title("Movie Recommendation System")
-st.write("Enter a movie name to get recommendations based on collaborative filtering.")
+st.title("Movie Recommender System")
+st.write("Enter a movie ID to get recommendations.")
 
-# User input for movie search
-movie_list = movies['title'].tolist()
-selected_movie = st.selectbox("Choose a movie:", movie_list)
-
-# Function to get recommendations
-def get_recommendations(movie_name, model, data, ratings, n=5):
-    # Get the movieId for the selected movie
-    movie_id = data[data['title'] == movie_name]['movieId'].values[0]
-    
-    # Create the user-item matrix (pivot table)
-    movie_features = ratings.pivot_table(index='movieId', columns='userId', values='rating').fillna(0)
-
-    # Check if the movieId exists in the matrix
-    if movie_id not in movie_features.index:
-        st.error("Movie not found in rating data.")
-        return []
-    
-    # Get index of movie in the feature matrix
-    movie_index = movie_features.index.get_loc(movie_id)
-
-    # Find nearest neighbors
-    distances, indices = model.kneighbors(movie_features.iloc[movie_index, :].values.reshape(1, -1), n_neighbors=n+1)
-
-    # Fetch movie recommendations
-    recommended_movie_ids = movie_features.iloc[indices.flatten()[1:]].index
-    recommendations = data[data['movieId'].isin(recommended_movie_ids)]['title'].tolist()
-
-    return recommendations
+movie_id = st.number_input("Movie ID", min_value=int(movies['movieId'].min()), max_value=int(movies['movieId'].max()), step=1)
 
 if st.button("Get Recommendations"):
-    try:
-        recommendations = get_recommendations(selected_movie, knn_model, movies, ratings)
+    recommendations = get_collab_recommendations(movie_id)
+    if recommendations:
+        recommended_movies = movies[movies['movieId'].isin(recommendations)][['movieId', 'title']]
         st.write("Recommended Movies:")
-        for rec in recommendations:
-            st.write(f"- {rec}")
-    except Exception as e:
-        st.error(f"Error: {e}")
-
+        st.dataframe(recommended_movies)
+    else:
+        st.write("No recommendations found.")
