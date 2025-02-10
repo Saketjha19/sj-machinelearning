@@ -9,8 +9,8 @@ App 3:(https://sj-machinelearning-ybztvzaiajmmbe9bvvdqzx.streamlit.app/)
 
 📌 Features:
 
-Content-Based Filtering: Recommends movies based on movie descriptions and other features.
-Collaborative Filtering: Suggests movies based on user interactions and preferences.
+Content-Based Filtering: Recommends movies based on movie descriptions and other features using cosine similarity.
+Collaborative Filtering: Suggests movies based on user interactions and preferences using knn.
 Hybrid Model: Combines content-based and collaborative filtering for better recommendations.
 Streamlit Deployment: A user-friendly web interface to interact with the recommendation models.
 
