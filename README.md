@@ -1,23 +1,14 @@
-# 🤖 Machine Learning App
+# 🎬Movie recommendation system
+This is a Movie Recommendation System that utilizes content-based, collaborative, and hybrid filtering models to provide personalized movie recommendations. The system is deployed using Streamlit, making it easy to use via a web interface.
+
+[![Streamlit App1](https://sj-machinelearning-s7gx45peq8vfwshyk2ur4u.streamlit.app/)
+[![Streamlit App2](https://sj-machinelearning-h3udqq4rn62ezfyiutzvnr.streamlit.app/)
+[![Streamlit App2](https://sj-machinelearning-ybztvzaiajmmbe9bvvdqzx.streamlit.app/)
+
+📌 Features
+Content-Based Filtering: Recommends movies based on movie descriptions, genres, and other metadata.
+Collaborative Filtering: Suggests movies based on user interactions and preferences.
+Hybrid Model: Combines content-based and collaborative filtering for better recommendations.
+Streamlit Deployment: A user-friendly web interface to interact with the recommendation models.
 
 
-This is the machine learning app.
-
-## Demo App
-
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://sj-machinelearning.streamlit.app/)
-
-## GitHub Codespaces
-
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/streamlit/app-starter-kit?quickstart=1)
-
-## Section Heading
-
-This is filler text, please replace this with text for this section.
-
-## Further Reading
-
-This is filler text, please replace this with a explanatory text about further relevant resources for this repo
-- Resource 1
-- Resource 2
-- Resource 3
