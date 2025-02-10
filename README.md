@@ -8,7 +8,7 @@ App 2:(https://sj-machinelearning-h3udqq4rn62ezfyiutzvnr.streamlit.app/)
 App 3:(https://sj-machinelearning-ybztvzaiajmmbe9bvvdqzx.streamlit.app/)
 
 📌 Features
-Content-Based Filtering: Recommends movies based on movie descriptions, genres, and other metadata.
+Content-Based Filtering: Recommends movies based on movie descriptions and other features.
 Collaborative Filtering: Suggests movies based on user interactions and preferences.
 Hybrid Model: Combines content-based and collaborative filtering for better recommendations.
 Streamlit Deployment: A user-friendly web interface to interact with the recommendation models.
